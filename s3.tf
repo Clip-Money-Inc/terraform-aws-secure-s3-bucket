@@ -51,7 +51,8 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "this" {
   bucket                = aws_s3_bucket.this.id
   expected_bucket_owner = data.aws_caller_identity.current.account_id
   rule {
-    bucket_key_enabled = local.used_kms_key_arn == null ? null : true
+    bucket_key_enabled       = local.used_kms_key_arn == null ? null : true
+    blocked_encryption_types = var.blocked_encryption_types
     apply_server_side_encryption_by_default {
       sse_algorithm     = local.used_kms_key_arn == null ? "AES256" : "aws:kms"
       kms_master_key_id = local.used_kms_key_arn == null ? null : local.used_kms_key_arn
